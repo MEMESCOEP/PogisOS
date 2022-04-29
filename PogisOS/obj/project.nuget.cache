@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "8NSCjO7FDtwEURNBxkd4JmcMZD67/veztQghkDq3p/xoVyUpKEFclH1/x/EL2mEsXIfdAxxZu8S6/AVANKgMZg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Andrew\\source\\repos\\PogisOS\\PogisOS\\PogisOS.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Andrew\\.nuget\\packages\\cosmos.build\\0.1.0-localbuild20220209054635\\cosmos.build.0.1.0-localbuild20220209054635.nupkg.sha512",
+    "C:\\Users\\Andrew\\.nuget\\packages\\cosmos.common\\0.1.0-localbuild20220209054647\\cosmos.common.0.1.0-localbuild20220209054647.nupkg.sha512",
+    "C:\\Users\\Andrew\\.nuget\\packages\\cosmos.core\\0.1.0-localbuild20220209054647\\cosmos.core.0.1.0-localbuild20220209054647.nupkg.sha512",
+    "C:\\Users\\Andrew\\.nuget\\packages\\cosmos.debug.kernel\\0.1.0-localbuild20220209054647\\cosmos.debug.kernel.0.1.0-localbuild20220209054647.nupkg.sha512",
+    "C:\\Users\\Andrew\\.nuget\\packages\\cosmos.hal2\\0.1.0-localbuild20220209054647\\cosmos.hal2.0.1.0-localbuild20220209054647.nupkg.sha512",
+    "C:\\Users\\Andrew\\.nuget\\packages\\cosmos.system2\\0.1.0-localbuild20220209054647\\cosmos.system2.0.1.0-localbuild20220209054647.nupkg.sha512",
+    "C:\\Users\\Andrew\\.nuget\\packages\\il2cpu.api\\0.1.0-localbuild20220209054647\\il2cpu.api.0.1.0-localbuild20220209054647.nupkg.sha512"
+  ],
+  "logs": []
+}
