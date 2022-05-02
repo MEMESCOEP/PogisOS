@@ -19,7 +19,7 @@ In order to use PogisOS, you'll need to follow these steps:
 2. Download Rufus (if you haven't already)
 3. Insert your USB Flash drive into your computer, and select it from the dropdown in rufus.
 4. In Rufus, select the PogisOS disk image.
-5. Click the start button at the bottom of the window. :warning:WARNING:warning: This step will ERASE ALL DATA ON YOUR USB FLASH DRIVE! Make sure you are okay with this before you proceed!
+5. Click the start button at the bottom of the window. (:warning:WARNING:warning: This step will ERASE ALL DATA ON YOUR USB FLASH DRIVE! Make sure you are okay with this before you proceed!)
 6. Wait for rufus to finish
 7. You're Done!
 
