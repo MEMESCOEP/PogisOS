@@ -14,9 +14,13 @@ namespace PogisOS
     {
         // Variables
         public string CWD = "0:\\";
-        private EndPoint endpoint;
-        [ManifestResourceStream(ResourceName = "PogisOS.Resources.ms.bmp")]
-        static byte[] mousedatalol;
+
+        [ManifestResourceStream(ResourceName = "PogisOS.Resources.MouseCursor.bmp")]
+        public static byte[] mousedatalol;
+
+        [ManifestResourceStream(ResourceName = "PogisOS.Resources.ButtonTemplate.bmp")]
+        public static byte[] ButtonDataLol;
+
         GlobalVars gbv = new GlobalVars();
 
         // Functions
@@ -47,6 +51,22 @@ namespace PogisOS
             return (orig.Length - s2.Length) / find.Length;
         }
 
+        public static string GetTopmostFolder(string path)
+        {
+            if (path.StartsWith(Path.DirectorySeparatorChar.ToString()))
+                path = path.Substring(1);
+
+            Uri inputPath;
+
+            if (Uri.TryCreate(path, UriKind.Absolute, out inputPath))
+                return Path.GetPathRoot(path);
+
+            if (Uri.TryCreate(path, UriKind.Relative, out inputPath))
+                return path.Split(Path.DirectorySeparatorChar)[0];
+
+            return path;
+        }
+
         public void Parse(string input)
         {
             string command = input;
@@ -72,8 +92,68 @@ namespace PogisOS
                 Console.WriteLine("11. ls");
                 Console.WriteLine("12. ipaddr");
                 Console.WriteLine("13. ping <ip address>");
-                Console.WriteLine("14. cat <file name>");
-                Console.WriteLine();
+                Console.WriteLine("14. edit <file name>");
+                Console.WriteLine("15. cat <file name>");
+                Console.WriteLine("16. gui (primitive; testing only)");
+                Console.WriteLine("17. acpi <disable, enable>");
+                Console.WriteLine("18. about");
+                Console.WriteLine("19. ldrv");
+                Console.WriteLine("20. lvol");
+                Console.WriteLine("21. lpart");
+            }
+            else if(command == "ldrv")
+            {
+                try
+                {
+                    int DriveCount = 1;
+                    foreach (var drive in Cosmos.System.FileSystem.VFS.VFSManager.GetDisks())
+                    {
+                        Console.WriteLine("[===== DRIVE " + DriveCount + " =====]");
+                        drive.DisplayInformation();
+                        DriveCount++;
+                        Console.WriteLine();
+                    }
+                }
+                catch
+                {
+
+                }
+            }
+            else if(command == "lvol")
+            {
+                try
+                {
+                    foreach (var drive in Cosmos.System.FileSystem.VFS.VFSManager.GetVolumes())
+                    {
+                        Console.WriteLine(drive.mName);
+                    }
+                }
+                catch
+                {
+
+                }
+            }
+            else if (command == "lpart")
+            {
+                try
+                {
+                    int DriveCount = 0;
+                    foreach (var drive in Cosmos.System.FileSystem.VFS.VFSManager.GetDisks())
+                    {
+                        Console.WriteLine("[===== DRIVE " + DriveCount + " =====]");
+                        Console.WriteLine("\tDrive \"" + DriveCount + "\" contains " + drive.Partitions.Count + " partition(s).");
+                        for (int i = 0; i < drive.Partitions.Count; i++)
+                        {
+                            Console.WriteLine("\tPartition " + i);
+                        }
+                        Console.WriteLine();
+                        DriveCount++;
+                    }
+                }
+                catch
+                {
+
+                }
             }
             else if (command.ToLower() == "ls")
             {
@@ -98,28 +178,28 @@ namespace PogisOS
             else if (command == "gui")
             {
                 Canvas canvas;
+                GlobalVars gbv = new GlobalVars();
                 canvas = FullScreenCanvas.GetFullScreenCanvas();
-
-                canvas.Clear(Color.Blue);
                 try
                 {
                     Pen pen = new Pen(Color.Red);
-                    canvas.Mode = new Mode(800, 600, ColorDepth.ColorDepth32);
-                    canvas.Clear(Color.Blue);
+                    canvas.Mode = new Mode(gbv.ScreenWidth, gbv.ScreenHeight, ColorDepth.ColorDepth32);
                     pen.Color = Color.LimeGreen;
                     Cosmos.System.MouseManager.MouseSensitivity = 1;
-                    Cosmos.System.MouseManager.ScreenHeight = 800;
-                    Cosmos.System.MouseManager.ScreenWidth = 600;
-                    Bitmap cursorBMP = new Bitmap(32,32, mousedatalol, ColorDepth.ColorDepth32);
+                    Cosmos.System.MouseManager.ScreenHeight = (uint)gbv.ScreenHeight;
+                    Cosmos.System.MouseManager.ScreenWidth = (uint)gbv.ScreenWidth;
+                    Bitmap cursorBMP = new Bitmap(mousedatalol);
+                    Bitmap button = new Bitmap(ButtonDataLol);
+                    int X = Convert.ToInt32(Cosmos.System.MouseManager.X);
+                    int Y = Convert.ToInt32(Cosmos.System.MouseManager.Y);
                     while (true)
                     {
                         Thread.Sleep(1);
+                        X = Convert.ToInt32(Cosmos.System.MouseManager.X);
+                        Y = Convert.ToInt32(Cosmos.System.MouseManager.Y);
                         canvas.Clear(Color.Blue);
-                        canvas.DrawImage(cursorBMP, Convert.ToInt32(Cosmos.System.MouseManager.X), Convert.ToInt32(Cosmos.System.MouseManager.Y));
-                        //canvas.DrawImage(cursorBMP, 45, 45);
-                        //canvas.DrawString("X: " + Cosmos.System.MouseManager.X.ToString() + " Y: " + Cosmos.System.MouseManager.X.ToString(), Cosmos.System.Graphics.Fonts.PCScreenFont.Default, pen, new Cosmos.System.Graphics.Point(0, 0));
-                        //canvas.DrawFilledRectangle(pen, new Cosmos.System.Graphics.Point((int)Cosmos.System.MouseManager.X, (int)Cosmos.System.MouseManager.Y), 10, 10);
-                        //canvas.DrawFilledRectangle(pen, new Cosmos.System.Graphics.Point(0, 0), 800, 50);
+                        canvas.DrawImageAlpha(button, 100, 300);
+                        canvas.DrawImageAlpha(cursorBMP, X, Y);
                         canvas.Display();
                     }
                 }
@@ -162,6 +242,13 @@ namespace PogisOS
                 {
                     Console.WriteLine("Directory already exists!");
                 }
+            }
+            else if(command == "about")
+            {
+                Console.WriteLine("Pogis OS (" + gbv.Version + ")");
+                Console.WriteLine(gbv.Copyright);
+                Console.WriteLine(gbv.Disclaimer);
+                Console.WriteLine(gbv.DetailsUrl);
             }
             else if (command == ("rmd"))
             {
@@ -221,6 +308,37 @@ namespace PogisOS
 
                 }
             }
+            else if (command == ("edit"))
+            {
+                try
+                {
+                    if (args[1].Length > 0 && input[4] == ' ' && input.Length > 3)
+                    {
+                        if (File.Exists(Directory.GetCurrentDirectory() + args[1]))
+                        {
+                            Applications.Edit editor = new Applications.Edit();
+                            editor.EditFile(Directory.GetCurrentDirectory() + args[1]);
+                        }
+                        else if (File.Exists(args[1]))
+                        {
+                            Applications.Edit editor = new Applications.Edit();
+                            editor.EditFile(args[1]);
+                        }
+                        else
+                        {
+                            Console.WriteLine("File \"" + args[1] + "\" doesn't exist!");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("You need to specify a file!");
+                    }
+                }
+                catch
+                {
+
+                }
+            }
             else if (command == ("mkf"))
             {
                 try
@@ -255,13 +373,27 @@ namespace PogisOS
                         if (args[1].Contains("..\\"))
                         {
                             int count = CountInString(args[1], "..\\");
-                            for (int i = 0; i <= count; i++)
-                            {
-                                if (Directory.Exists(Directory.GetParent(Directory.GetCurrentDirectory()).FullName))
+                            for (int i = 0; i < count; i++)
+                            {                                                               
+                                try
                                 {
-                                    string dirname = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
-                                    Directory.SetCurrentDirectory(dirname);
-                                    CWD = Directory.GetCurrentDirectory();
+                                    if (Path.GetPathRoot(Directory.GetCurrentDirectory()) != Directory.GetCurrentDirectory())
+                                    {
+                                        if (CountInString(Path.GetFullPath(Directory.GetParent(Directory.GetCurrentDirectory()).FullName), @"\") < 1)
+                                        {
+
+                                        }
+                                        else if (Directory.Exists(Path.GetFullPath(Directory.GetParent(Directory.GetCurrentDirectory()).FullName)))
+                                        {
+                                            string dirname = Path.GetFullPath(Directory.GetParent(Directory.GetCurrentDirectory()).FullName);
+                                            Directory.SetCurrentDirectory(dirname);
+                                            CWD = Directory.GetCurrentDirectory();
+                                        }
+                                    }                                  
+                                }
+                                catch
+                                {
+
                                 }
                             }
                         }
@@ -327,13 +459,95 @@ namespace PogisOS
 
                 }
             }
+            else if (command.ToLower() == "acpi")
+            {
+                try
+                {
+                    if (args[1].Length > 0 && input[4] == ' ' && input.Length > 5)
+                    {
+                        if (args[1] == "disable")
+                        {
+                            Console.WriteLine("WARNING! Disabling ACPI can limit OS functionality!");
+                            Console.Write("Are you ABSOLUTELY SURE you want to continue? (Yes/No) >> ");
+                            if (Console.ReadLine().ToLower() == "yes")
+                            {
+                                Console.WriteLine("[ACPI] >> Disabling ACPI...");
+                                try
+                                {
+                                    Cosmos.Core.ACPI.Disable();
+                                    Console.WriteLine("[ACPI] >> Done.");
+                                }
+                                catch (Exception EX)
+                                {
+                                    Console.WriteLine("[ACPI -> Disable] >> ERROR: " + EX.Message);
+                                }
+                            }
+                        }
+                        else if (args[1] == "enable")
+                        {
+                            Console.WriteLine("[ACPI] >> Enabling ACPI...");
+                            try
+                            {
+                                Cosmos.Core.ACPI.Enable();
+                                Console.WriteLine("[ACPI] >> Done.");
+                            }
+                            catch (Exception EX)
+                            {
+                                Console.WriteLine("[ACPI -> Enable] >> ERROR: " + EX.Message);
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("[ACPI] >> Invalid option. Valid options are 'enable' and 'disable'");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("[ACPI] >> You need to specify an option!");
+                    }
+                }
+                catch
+                {
+
+                }
+            }
             else if (command.ToLower() == "shutdown")
             {
-                Cosmos.System.Power.Shutdown();
+                try
+                {
+                    Cosmos.Core.ACPI.Shutdown();
+                }
+                catch
+                {
+                    try
+                    {
+                        Cosmos.System.Power.Shutdown();
+                    }
+                    catch (Exception EX)
+                    {
+                        Console.WriteLine("[ERROR -> SHUTDOWN] Shutdown failed!\nDetails: " + EX.Message);
+                    }
+                }
+                Cosmos.Core.CPU.Halt();
             }
             else if (command.ToLower() == "reboot")
             {
-                Cosmos.System.Power.Reboot();
+                try
+                {
+                    Cosmos.Core.ACPI.Reboot();
+                }
+                catch
+                {
+                    try
+                    {
+                        Cosmos.System.Power.Reboot();
+                    }
+                    catch(Exception EX)
+                    {
+                        Console.WriteLine("[ERROR -> REBOOT] Reboot failed!\nDetails: " + EX.Message);
+                    }                    
+                }
+                Cosmos.Core.CPU.Reboot();
             }
             else if (command.ToLower() == "cls")
             {
@@ -361,7 +575,7 @@ namespace PogisOS
                                 }
                             }
                         }
-                        catch (Exception EX)
+                        catch
                         {
 
                         }

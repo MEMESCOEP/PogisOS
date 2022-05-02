@@ -1,7 +1,6 @@
 C:\Users\Andrew\source\repos\PogisOS\PogisOS\bin\Debug\net5.0\PogisOS.deps.json
 C:\Users\Andrew\source\repos\PogisOS\PogisOS\bin\Debug\net5.0\PogisOS.dll
 C:\Users\Andrew\source\repos\PogisOS\PogisOS\bin\Debug\net5.0\ref\PogisOS.dll
-C:\Users\Andrew\source\repos\PogisOS\PogisOS\bin\Debug\net5.0\PogisOS.pdb
 C:\Users\Andrew\source\repos\PogisOS\PogisOS\obj\Debug\net5.0\PogisOS.csproj.AssemblyReference.cache
 C:\Users\Andrew\source\repos\PogisOS\PogisOS\obj\Debug\net5.0\PogisOS.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Andrew\source\repos\PogisOS\PogisOS\obj\Debug\net5.0\PogisOS.AssemblyInfoInputs.cache
@@ -9,6 +8,5 @@ C:\Users\Andrew\source\repos\PogisOS\PogisOS\obj\Debug\net5.0\PogisOS.AssemblyIn
 C:\Users\Andrew\source\repos\PogisOS\PogisOS\obj\Debug\net5.0\PogisOS.csproj.CoreCompileInputs.cache
 C:\Users\Andrew\source\repos\PogisOS\PogisOS\obj\Debug\net5.0\PogisOS.dll
 C:\Users\Andrew\source\repos\PogisOS\PogisOS\obj\Debug\net5.0\ref\PogisOS.dll
-C:\Users\Andrew\source\repos\PogisOS\PogisOS\obj\Debug\net5.0\PogisOS.pdb
 C:\Users\Andrew\source\repos\PogisOS\PogisOS\obj\Debug\net5.0\PogisOS.Properties.Resources.resources
 C:\Users\Andrew\source\repos\PogisOS\PogisOS\obj\Debug\net5.0\PogisOS.csproj.GenerateResource.cache
